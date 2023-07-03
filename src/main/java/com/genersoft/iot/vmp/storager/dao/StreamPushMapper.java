@@ -36,7 +36,7 @@ public interface StreamPushMapper {
     int update(StreamPushItem streamPushItem);
 
     @Delete("DELETE FROM wvp_stream_push WHERE app=#{app} AND stream=#{stream}")
-    int del(String app, String stream);
+    int del(@Param("app") String app,@Param("stream") String stream);
 
     @Delete("<script> "+
             "DELETE sp FROM wvp_stream_push sp left join wvp_gb_stream gs on sp.app = gs.app AND sp.stream = gs.stream where " +
@@ -79,13 +79,13 @@ public interface StreamPushMapper {
             " <if test='mediaServerId != null' > AND st.media_server_id=#{mediaServerId} </if>" +
             "order by st.create_time desc" +
             " </script>"})
-    List<StreamPushItem> selectAllForList(String query, Boolean pushing, String mediaServerId);
+    List<StreamPushItem> selectAllForList(@Param("query") String query,@Param("pushing")  Boolean pushing,@Param("mediaServerId")  String mediaServerId);
 
     @Select("SELECT st.*, gs.gb_id, gs.name, gs.longitude, gs.latitude FROM wvp_stream_push st LEFT join wvp_gb_stream gs on st.app = gs.app AND st.stream = gs.stream order by st.create_time desc")
     List<StreamPushItem> selectAll();
 
     @Select("SELECT st.*, gs.gb_id, gs.name, gs.longitude, gs.latitude FROM wvp_stream_push st LEFT join wvp_gb_stream gs on st.app = gs.app AND st.stream = gs.stream WHERE st.app=#{app} AND st.stream=#{stream}")
-    StreamPushItem selectOne(String app, String stream);
+    StreamPushItem selectOne(@Param("app") String app,@Param("stream")  String stream);
 
     @Insert("<script>"  +
             "Insert INTO wvp_stream_push (app, stream, total_reader_count, origin_type, origin_type_str, " +
@@ -111,28 +111,28 @@ public interface StreamPushMapper {
             "               left join wvp_stream_push sp on sp.id = wgs.gb_stream_id" +
             "           where wgs.gb_id is null and wgs.media_server_id = #{mediaServerId}) temp)"
             )
-    void deleteWithoutGBId(String mediaServerId);
+    void deleteWithoutGBId(@Param("mediaServerId") String mediaServerId);
 
     @Select("SELECT * FROM wvp_stream_push WHERE media_server_id=#{mediaServerId}")
-    List<StreamPushItem> selectAllByMediaServerId(String mediaServerId);
+    List<StreamPushItem> selectAllByMediaServerId(@Param("mediaServerId") String mediaServerId);
 
     @Select("SELECT sp.* FROM wvp_stream_push sp left join wvp_gb_stream gs on gs.app = sp.app and gs.stream= sp.stream WHERE sp.media_server_id=#{mediaServerId} and gs.gb_id is null")
-    List<StreamPushItem> selectAllByMediaServerIdWithOutGbID(String mediaServerId);
+    List<StreamPushItem> selectAllByMediaServerIdWithOutGbID(@Param("mediaServerId") String mediaServerId);
 
     @Update("UPDATE wvp_stream_push " +
             "SET status=#{status} " +
             "WHERE app=#{app} AND stream=#{stream}")
-    int updateStatus(String app, String stream, boolean status);
+    int updateStatus(@Param("app") String app,@Param("stream")  String stream,@Param("status")  boolean status);
 
     @Update("UPDATE wvp_stream_push " +
             "SET push_ing=#{pushIng} " +
             "WHERE app=#{app} AND stream=#{stream}")
-    int updatePushStatus(String app, String stream, boolean pushIng);
+    int updatePushStatus(@Param("app") String app, @Param("stream") String stream,@Param("pushIng")  boolean pushIng);
 
     @Update("UPDATE wvp_stream_push " +
             "SET status=#{status} " +
             "WHERE media_server_id=#{mediaServerId}")
-    void updateStatusByMediaServerId(String mediaServerId, boolean status);
+    void updateStatusByMediaServerId(@Param("mediaServerId") String mediaServerId,@Param("status")  boolean status);
 
 
     @Select("<script> "+
@@ -185,7 +185,7 @@ public interface StreamPushMapper {
             " <if test='pushIngAsOnline == true'> select count(1) from wvp_stream_push where push_ing = true </if>" +
             " <if test='pushIngAsOnline == false'> select count(1)from wvp_stream_push where status = true  </if>" +
             " </script>"})
-    int getAllOnline(Boolean usePushingAsStatus);
+    int getAllOnline(@Param("pushIngAsOnline") Boolean usePushingAsStatus);
 
     @Select("<script> " +
             "select app, stream from wvp_stream_push where (app, stream) in " +

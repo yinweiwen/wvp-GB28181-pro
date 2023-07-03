@@ -1,10 +1,7 @@
 package com.genersoft.iot.vmp.storager.dao;
 
 import com.genersoft.iot.vmp.gb28181.bean.DeviceAlarm;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +15,7 @@ public interface DeviceAlarmMapper {
 
     @Insert("INSERT INTO wvp_device_alarm (device_id, channel_id, alarm_priority, alarm_method, alarm_time, alarm_description, longitude, latitude, alarm_type , create_time ) " +
             "VALUES (#{deviceId}, #{channelId}, #{alarmPriority}, #{alarmMethod}, #{alarmTime}, #{alarmDescription}, #{longitude}, #{latitude}, #{alarmType}, #{createTime})")
-    int add(DeviceAlarm alarm);
+    int add(@Param("alarm") DeviceAlarm alarm);
 
 
     @Select( value = {" <script>" +
@@ -32,8 +29,12 @@ public interface DeviceAlarmMapper {
             " <if test=\"endTime != null\" >  AND alarm_time &lt;= #{endTime} </if>" +
             " ORDER BY alarm_time ASC " +
             " </script>"})
-    List<DeviceAlarm> query(String deviceId, String alarmPriority, String alarmMethod,
-                            String alarmType, String startTime, String endTime);
+    List<DeviceAlarm> query(@Param("deviceId") String deviceId,
+                            @Param("alarmPriority") String alarmPriority,
+                            @Param("alarmMethod") String alarmMethod,
+                            @Param("alarmType") String alarmType,
+                            @Param("startTime") String startTime,
+                            @Param("endTime") String endTime);
 
 
     @Delete(" <script>" +
@@ -45,5 +46,7 @@ public interface DeviceAlarmMapper {
             " <if test=\"id != null\" > AND id = #{id}</if>" +
             " </script>"
             )
-    int clearAlarmBeforeTime(Integer id, List<String> deviceIdList, String time);
+    int clearAlarmBeforeTime(@Param("id") Integer id,
+                             @Param("deviceIdList") List<String> deviceIdList,
+                             @Param("time") String time);
 }

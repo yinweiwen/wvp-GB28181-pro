@@ -21,13 +21,13 @@ public interface RoleMapper {
             "<if test=\"authority != null\">, authority=#{authority}</if>" +
             "WHERE id != 1 and id=#{id}" +
             " </script>"})
-    int update(Role role);
+    int update(@Param("role") Role role);
 
     @Delete("DELETE from wvp_user_role WHERE  id != 1 and id=#{id}")
-    int delete(int id);
+    int delete(@Param("id") int id);
 
     @Select("select * from wvp_user_role WHERE id=#{id}")
-    Role selectById(int id);
+    Role selectById(@Param("id") int id);
 
     @Select("select * from wvp_user_role")
     List<Role> selectAll();

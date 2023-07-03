@@ -17,19 +17,19 @@ public interface PlatformCatalogMapper {
     int add(PlatformCatalog platformCatalog);
 
     @Delete("DELETE from wvp_platform_catalog WHERE id=#{id}")
-    int del(String id);
+    int del(@Param("id") String id);
 
     @Delete("DELETE from wvp_platform_catalog WHERE platform_id=#{platformId}")
-    int delByPlatformId(String platformId);
+    int delByPlatformId(@Param("platformId") String platformId);
 
     @Select("SELECT pc.*, count(pc2.id) as children_count from wvp_platform_catalog pc " +
             "left join wvp_platform_catalog pc2 on pc.id = pc2.parent_id " +
             "WHERE pc.parent_id=#{parentId} AND pc.platform_id=#{platformId} " +
             "group by pc.id, pc.name, pc.platform_id, pc.business_group_id, pc.civil_code, pc.parent_id")
-    List<PlatformCatalog> selectByParentId(String platformId, String parentId);
+    List<PlatformCatalog> selectByParentId(@Param("platformId") String platformId,@Param("parentId")  String parentId);
 
     @Select("SELECT *, (SELECT COUNT(1) from wvp_platform_catalog where parent_id = pc.id) as children_count  from wvp_platform_catalog pc WHERE pc.id=#{id}")
-    PlatformCatalog select(String id);
+    PlatformCatalog select(@Param("id") String id);
 
     @Update(value = {" <script>" +
             "UPDATE wvp_platform_catalog " +
@@ -39,16 +39,16 @@ public interface PlatformCatalogMapper {
     int update(PlatformCatalog platformCatalog);
 
     @Select("SELECT *, (SELECT COUNT(1) from wvp_platform_catalog where parent_id = pc.id) as children_count  from wvp_platform_catalog pc WHERE pc.platform_id=#{platformId}")
-    List<PlatformCatalog> selectByPlatForm(String platformId);
+    List<PlatformCatalog> selectByPlatForm(@Param("platformId") String platformId);
 
     @Select("SELECT pc.* FROM  wvp_platform_catalog pc WHERE pc.id = (SELECT pp.catalog_id from wvp_platform pp WHERE pp.server_gb_id=#{platformId})")
-    PlatformCatalog selectDefaultByPlatFormId(String platformId);
+    PlatformCatalog selectDefaultByPlatFormId(@Param("platformId") String platformId);
 
 
     @Select("SELECT pc.* FROM  wvp_platform_catalog pc WHERE pc.id = #{id}")
-    PlatformCatalog selectParentCatalog(String id);
+    PlatformCatalog selectParentCatalog(@Param("id") String id);
 
     @Select("SELECT pc.id as channel_id, pc.name, pc.civil_code, pc.business_group_id,'1' as parental, pc.parent_id  " +
             " from wvp_platform_catalog pc WHERE pc.platform_id=#{platformId}")
-    List<DeviceChannel> queryCatalogInPlatform(String platformId);
+    List<DeviceChannel> queryCatalogInPlatform(@Param("platformId") String platformId);
 }

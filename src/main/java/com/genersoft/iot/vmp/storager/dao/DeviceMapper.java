@@ -45,7 +45,7 @@ public interface DeviceMapper {
             "switch_primary_sub_stream," +
             "(SELECT count(0) FROM wvp_device_channel WHERE device_id=wvp_device.device_id) as channel_count "+
             " FROM wvp_device WHERE device_id = #{deviceId}")
-    Device getDeviceByDeviceId(String deviceId);
+    Device getDeviceByDeviceId(@Param("deviceId") String deviceId);
 
     @Insert("INSERT INTO wvp_device (" +
                 "device_id, " +
@@ -165,10 +165,10 @@ public interface DeviceMapper {
             " order by create_time desc "+
             " </script>"
     )
-    List<Device> getDevices(Boolean onLine);
+    List<Device> getDevices(@Param("onLine") Boolean onLine);
 
     @Delete("DELETE FROM wvp_device WHERE device_id=#{deviceId}")
-    int del(String deviceId);
+    int del(@Param("deviceId") String deviceId);
 
     @Select("SELECT " +
             "device_id, " +
@@ -229,7 +229,7 @@ public interface DeviceMapper {
             "geo_coord_sys,"+
             "on_line"+
             " FROM wvp_device WHERE ip = #{host} AND port=#{port}")
-    Device getDeviceByHostAndPort(String host, int port);
+    Device getDeviceByHostAndPort(@Param("host") String host,@Param("port")  int port);
 
     @Update(value = {" <script>" +
             "UPDATE wvp_device " +

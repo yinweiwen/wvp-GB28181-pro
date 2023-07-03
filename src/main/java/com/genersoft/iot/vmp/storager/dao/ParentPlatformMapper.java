@@ -69,32 +69,32 @@ public interface ParentPlatformMapper {
     List<ParentPlatform> getParentPlatformList();
 
     @Select("SELECT * FROM wvp_platform WHERE enable=#{enable} ")
-    List<ParentPlatform> getEnableParentPlatformList(boolean enable);
+    List<ParentPlatform> getEnableParentPlatformList(@Param("enable") boolean enable);
 
     @Select("SELECT * FROM wvp_platform WHERE enable=true and as_message_channel=true")
     List<ParentPlatform> queryEnablePlatformListWithAsMessageChannel();
 
     @Select("SELECT * FROM wvp_platform WHERE server_gb_id=#{platformGbId}")
-    ParentPlatform getParentPlatByServerGBId(String platformGbId);
+    ParentPlatform getParentPlatByServerGBId(@Param("platformGbId") String platformGbId);
 
     @Select("SELECT * FROM wvp_platform WHERE id=#{id}")
-    ParentPlatform getParentPlatById(int id);
+    ParentPlatform getParentPlatById(@Param("id") int id);
 
     @Update("UPDATE wvp_platform SET status=false" )
     int outlineForAllParentPlatform();
 
     @Update("UPDATE wvp_platform SET status=#{online} WHERE server_gb_id=#{platformGbID}" )
-    int updateParentPlatformStatus(String platformGbID, boolean online);
+    int updateParentPlatformStatus(@Param("platformGbID") String platformGbID, @Param("online") boolean online);
 
     @Update(value = {" <script>" +
             "UPDATE wvp_platform " +
             "SET catalog_id=#{catalogId}, update_time=#{updateTime}" +
             "WHERE server_gb_id=#{platformId}"+
             "</script>"})
-    int setDefaultCatalog(String platformId, String catalogId, String updateTime);
+    int setDefaultCatalog(@Param("platformId") String platformId, @Param("catalogId") String catalogId, @Param("updateTime") String updateTime);
 
     @Select("select 'channel' as name, count(pgc.platform_id) count from wvp_platform_gb_channel pgc left join wvp_device_channel dc on dc.id = pgc.device_channel_id where  pgc.platform_id=#{platform_id} and dc.channel_id =#{gbId} " +
             "union " +
             "select 'stream' as name, count(pgs.platform_id) count from wvp_platform_gb_stream pgs left join wvp_gb_stream gs on pgs.gb_stream_id = gs.gb_stream_id where  pgs.platform_id=#{platform_id} and gs.gb_id =#{gbId}")
-    List<ChannelSourceInfo> getChannelSource(String platform_id, String gbId);
+    List<ChannelSourceInfo> getChannelSource(@Param("platform_id") String platform_id,@Param("gbId")  String gbId);
 }
