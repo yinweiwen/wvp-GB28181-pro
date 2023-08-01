@@ -55,9 +55,9 @@ public interface PlatformGbStreamMapper {
     List<ParentPlatform> selectByAppAndStream(@Param("app") String app, @Param("stream") String stream);
 
     @Select("SELECT pgs.*, gs.gb_id  from wvp_platform_gb_stream pgs " +
-        "LEFT join wvp_gb_stream gs ON pgs.gb_stream_id = gs.gb_stream_id  " +
-        "WHERE gs.app=#{app} AND gs.stream=#{stream} AND pgs.platform_id=#{serverGBId}")
-    StreamProxyItem selectOne(@Param("app") String app, @Param("stream") String stream, @Param("serverGBId") String serverGBId);
+            "LEFT join wvp_gb_stream gs ON pgs.gb_stream_id = gs.gb_stream_id  " +
+            "WHERE gs.app=#{app} AND gs.stream=#{stream} AND pgs.platform_id=#{platformId}")
+    StreamProxyItem selectOne(@Param("app") String app, @Param("stream") String stream, @Param("platformId") String platformId);
 
     @Select("select gs.* \n" +
         "from wvp_gb_stream gs\n" +

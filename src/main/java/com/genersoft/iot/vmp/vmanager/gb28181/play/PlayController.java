@@ -116,7 +116,7 @@ public class PlayController {
 		// 录像查询以channelId作为deviceId查询
 		resultHolder.put(key, uuid, result);
 
-		playService.play(newMediaServerItem, deviceId, channelId, (code, msg, data) -> {
+		playService.play(newMediaServerItem, deviceId, channelId, null, (code, msg, data) -> {
 			WVPResult<StreamContent> wvpResult = new WVPResult<>();
 			if (code == InviteErrorCode.SUCCESS.getCode()) {
 				wvpResult.setCode(ErrorCode.SUCCESS.getCode());
@@ -359,7 +359,7 @@ public class PlayController {
 		message.setKey(key);
 		message.setId(uuid);
 
-		String fileName = deviceId + "_" + channelId + "_" + DateUtil.getNowForUrl() + "jpg";
+		String fileName = deviceId + "_" + channelId + "_" + DateUtil.getNowForUrl() + ".jpg";
 		playService.getSnap(deviceId, channelId, fileName, (code, msg, data) -> {
 			if (code == InviteErrorCode.SUCCESS.getCode()) {
 				message.setData(data);

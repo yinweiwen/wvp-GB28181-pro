@@ -69,10 +69,10 @@ public interface PlatformChannelMapper {
         "where dc.channel_id = #{channelId} and pgc.platform_id=#{platformId}")
     List<Device> queryVideoDeviceByPlatformIdAndChannelId(@Param("platformId") String platformId, @Param("channelId") String channelId);
 
-    @Delete("<script> " +
-        "DELETE from wvp_platform_gb_channel WHERE catalog_id=#{id}" +
-        "</script>")
-    int delByCatalogId(@Param("id") String id);
+    @Delete("<script> "+
+            "DELETE from wvp_platform_gb_channel WHERE platform_id=#{platformId} and catalog_id=#{id}"  +
+            "</script>")
+    int delByCatalogId(@Param("platformId") String platformId, @Param("id") String id);
 
     @Delete("<script> " +
         "DELETE from wvp_platform_gb_channel  WHERE catalog_id=#{parentId} AND platform_id=#{platformId} AND channel_id=#{id}" +
