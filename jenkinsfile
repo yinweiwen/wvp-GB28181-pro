@@ -1,0 +1,25 @@
+podTemplate {
+    node('pod-templ-jenkins-slave-common') {
+
+		env.IMAGE_NAME = "${IOT_IMAGES_REGISTRY}/${ZHIWUCLOUD}/${JOB_NAME}"
+		env.IMAGE_NAME_SHORT = "${ZHIWUCLOUD}/${JOB_NAME}"
+		env.SVN = "${SVN_ADDR_ROOT}/FS-Anxinyun/trunk/codes/services/MediaPusher/wvp"
+
+	    stage('Run shell') {
+
+            checkout([$class: 'SubversionSCM', filterChangelog: false, ignoreDirPropChanges: false, locations: [
+                [cancelProcessOnExternalsFail: true, credentialsId: 'svn-build', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: '${SVN}'],
+            ], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+
+		    container('image-builder') {
+				sh'''
+                    cp /temp/mvn/settings.xml ${BUILD_WORKSPACE}
+				    /kaniko/executor --context=${BUILD_WORKSPACE} --dockerfile=./DOCKERFILE --destination=${IMAGE_NAME}:${IMAGE_VERSION} --cache=false --cleanup
+			    '''
+		    }
+
+		    buildName "${IMAGE_NAME_SHORT}:${IMAGE_VERSION}"
+		    buildDescription "${IMAGE_NAME}:${IMAGE_VERSION}"
+		}
+	}
+}

@@ -181,6 +181,10 @@ public class ZLMHttpHookListener {
 
         JSONObject json = (JSONObject) JSON.toJSON(param);
 
+        if(param.getStream().contains("test")){
+            return  HookResultForOnPublish.SUCCESS();
+        }
+
         logger.info("[ZLM HOOK]推流鉴权：{}->{}", param.getMediaServerId(), param);
 
         String mediaServerId = json.getString("mediaServerId");

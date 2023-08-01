@@ -33,9 +33,9 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: org.postgresql.Driver
 #        url: jdbc:mysql://127.0.0.1:3306/wvp2?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true
-        url: jdbc:postgresql://10.8.30.156:5432/wvp
-        username: postgres
-        password: postgres
+        url: jdbc:postgresql://10.8.30.39:5432/wvp
+        username: FashionAdmin
+        password: 123456
         hikari:
             connection-timeout: 20000             # 是客户端等待连接池连接的最大毫秒数
             initialSize: 10                       # 连接池初始化连接数
@@ -82,7 +82,7 @@ sip:
     # [可选] 没有任何业务需求，仅仅是在前端展示的时候用
     show-ip: 10.8.30.183
     # [可选] 28181服务监听的端口
-    port: 5060
+    port: 32339
     # 根据国标6.1.2中规定，domain宜采用ID统一编码的前十位编码。国标附录D中定义前8位为中心编码（由省级、市级、区级、基层编号组成，参照GB/T 2260-2007）
     # 后两位为行业编码，定义参照附录D.3
     # 3701020049标识山东济南历下区 信息行业接入
@@ -113,7 +113,7 @@ jt1078:
 #zlm 默认服务器配置
 media:
     # [必须修改] zlm服务器唯一id，用于触发hook时区别是哪台服务器,general.mediaServerId
-    id: your_server_id
+    id: LnV3cOs3Y3IOhV66
     # [必须修改] zlm服务器的内网IP
     ip: 10.8.30.38
     # [可选] 返回流地址时的ip，置空使用 media.ip
@@ -123,7 +123,7 @@ media:
     # [可选] zlm服务器的hook所使用的IP, 默认使用sip.ip
     hook-ip: 10.8.30.183
     # [必须修改] zlm服务器的http.port
-    http-port: 8080
+    http-port: 8081
     # [可选] zlm服务器的http.sslport, 置空使用zlm配置文件配置
     http-ssl-port:
     # [可选] zlm服务器的rtmp.port, 置空使用zlm配置文件配置
@@ -143,7 +143,7 @@ media:
     # 启用多端口模式, 多端口模式使用端口区分每路流，兼容性更好。 单端口使用流的ssrc区分， 点播超时建议使用多端口测试
     rtp:
         # [可选] 是否启用多端口模式, 开启后会在portRange范围内选择端口用于媒体流传输
-        enable: true
+        enable: false
         # [可选] 在此范围内选择端口用于媒体流传输, 必须提前在zlm上配置该属性，不然自动配置此属性可能不成功
         port-range: 30000,30500 # 端口范围
         send-port-range: 40000,40500 # 端口范围
@@ -197,7 +197,7 @@ user-settings:
     # 是否开启sip日志
     sip-log: true
     # 是否开启sql日志
-    sql-log: true
+    sql-log: false
     # 消息通道功能-缺少国标ID是否给所有上级发送消息
     send-to-platforms-when-id-lost: true
     # 保持通道状态，不接受notify通道状态变化， 兼容海康平台发送错误消息
@@ -210,13 +210,13 @@ user-settings:
     use-custom-ssrc-for-parent-invite: true
     # 跨域配置，配置你访问前端页面的地址即可， 可以配置多个
     allowed-origins:
-        - http://localhost:8008
+        - http://localhost:8081
         - http://localhost:8080
         - http://192.168.1.3:8008
 
 # 关闭在线文档（生产环境建议关闭）
 springdoc:
     api-docs:
-        enabled: false
+        enabled: true
     swagger-ui:
-        enabled: false
+        enabled: true

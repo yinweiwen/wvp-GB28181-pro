@@ -1,0 +1,21 @@
+podTemplate {
+    node('pod-templ-jenkins-slave-common') {
+
+		env.IMAGE_NAME = "${IOT_IMAGES_REGISTRY}/${IOT}/${JOB_NAME}"
+		env.IMAGE_NAME_SHORT = "${IOT}/${JOB_NAME}"
+        env.SVN_Add = "${SVN_ADDRESS}/FS-Anxinyun/trunk/codes/services/MediaPusher/wvp/web_src"
+
+	    stage('Run shell') {
+		    checkout([$class: 'SubversionSCM', filterChangelog: false, locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'svn-build', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${SVN_Add}"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+
+		    container('image-builder') {
+				sh'''
+				    /kaniko/executor --context=${BUILD_WORKSPACE} --dockerfile=./Dockerfile --destination=${IMAGE_NAME}:${IMAGE_VERSION} --cache=false --cleanup
+			    '''
+		    }
+
+		    buildName "${IMAGE_NAME_SHORT}:${IMAGE_VERSION}"
+		    buildDescription "${IMAGE_NAME}:${IMAGE_VERSION}"
+		}
+	}
+}

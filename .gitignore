@@ -28,3 +28,7 @@ hs_err_pid*
 
 /src/main/resources/static/
 certificates
+/snap
+/web_src/static/liveplayer.swf
+/web_src/static/static
+/web_src/static/crossdomain.xml

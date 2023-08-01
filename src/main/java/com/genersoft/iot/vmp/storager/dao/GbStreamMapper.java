@@ -14,12 +14,28 @@ import java.util.List;
 @Repository
 public interface GbStreamMapper {
 
-    @Insert("REPLACE INTO wvp_gb_stream (app, stream, gb_id, name, " +
+//    @Insert("REPLACE INTO wvp_gb_stream (app, stream, gb_id, name, " +
+//        "longitude, latitude, stream_type,media_server_id,create_time) VALUES" +
+//        "(#{app}, #{stream}, #{gbId}, #{name}, " +
+//        "#{longitude}, #{latitude}, #{streamType}, " +
+//        "#{mediaServerId}, #{createTime})")
+    @Insert("INSERT INTO wvp_gb_stream (app, stream, gb_id, name, " +
         "longitude, latitude, stream_type,media_server_id,create_time) VALUES" +
         "(#{app}, #{stream}, #{gbId}, #{name}, " +
         "#{longitude}, #{latitude}, #{streamType}, " +
-        "#{mediaServerId}, #{createTime})")
-    @Options(useGeneratedKeys = true, keyProperty = "gbStreamId", keyColumn = "gbStreamId")
+        "#{mediaServerId}, #{createTime})" +
+        " ON CONFLICT (gb_stream_id) DO UPDATE" +
+        " SET\n " +
+        "app=#{app},\n"+
+        "stream=#{stream},\n"+
+        "gb_id=#{gbId},\n"+
+        "name=#{name},\n"+
+        "longitude=#{longitude},\n"+
+        "latitude=#{latitude},\n"+
+        "stream_type=#{streamType},\n"+
+        "media_server_id=#{mediaServerId},\n"+
+        "create_time=#{createTime}")
+    @Options(useGeneratedKeys = true, keyProperty = "gbStreamId", keyColumn = "gb_stream_id")
     int add(GbStream gbStream);
 
     @Update("UPDATE wvp_gb_stream " +
